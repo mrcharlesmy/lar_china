@@ -1,6 +1,6 @@
 ---
-title: "Language Autonomy Research EFA - Group A (N=629) - v0"
-author: '[Charles C.](https://mrcharles.dev)'
+title: "Language Autonomy Research EFA - Group A (N=629) - v1"
+author: 'by [Charles C.](https://mrcharles.dev)'
 output:
   html_document:
     toc: true
@@ -83,100 +83,105 @@ cat("Removed", removed, "rows (", round(100*removed/nrow(dataset02), 1), "%).\n"
 ```
 
 
-# STEP 05. Assumption check - statistical: correlation matrix, p-values, CIs
+# STEP 05. Assumption check - flag high-correlation item pairs only (above .80)
 ```{r step-05, echo = TRUE, message = FALSE, warning = FALSE}
-print (corr.test(dataset02_clean), short = FALSE)
+# ---- tweakable settings ----
+r_cutoff <- 0.80   # show pairs with |r| >= this
+p_cutoff <- 0.05   # optionally filter by p-value (set to 1 to ignore)
+adjust_method <- "holm"  # "none", "holm", "bonferroni", "BH", etc.
+
+# ---- correlation test ----
+ct <- psych::corr.test(dataset02_clean, use = "pairwise", adjust = adjust_method)
+R  <- ct$r
+P  <- ct$p
+
+# ---- build tidy upper-triangle table ----
+idx <- which(upper.tri(R), arr.ind = TRUE)
+
+tab_high <- tibble(
+  item1 = colnames(R)[idx[, 1]],
+  item2 = colnames(R)[idx[, 2]],
+  r     = R[upper.tri(R)],
+  p     = P[upper.tri(R)]
+) %>%
+  mutate(abs_r = abs(r)) %>%
+  filter(abs_r >= r_cutoff, p <= p_cutoff) %>%
+  arrange(desc(abs_r)) %>%
+  select(item1, item2, r, p)
+
+# ---- print a compact report ----
+cat("High-correlation pairs (|r| >=", r_cutoff, "), p <=", p_cutoff,
+    " (p adjusted:", adjust_method, ")\n\n")
+
+if (nrow(tab_high) == 0) {
+  cat("No pairs met the criteria.\n")
+} else {
+  print(tab_high, n = Inf)
+}
 ```
 
 
-# STEP 06. Assumption check - visual: correlation matrix heat map
+# STEP 06. Bartlett's test of sphericity
 ```{r step-06, echo = TRUE, message = FALSE, warning = FALSE}
-corrplot(cor(dataset02_clean), method = "color", addCoef.col = "black", tl.cex = 0.8, number.cex = 0.8)
-```
-
-
-# STEP 07. Bartlett's test of sphericity
-```{r step-07, echo = TRUE, message = FALSE, warning = FALSE}
 cortest.bartlett(dataset02_clean)
 ```
 
 
-# STEP 08. KMO test
-```{r step-08, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 07. KMO test
+```{r step-07, echo = TRUE, message = FALSE, warning = FALSE}
 KMO(dataset02_clean)
 ```
 
 
-# STEP 09. Determine number of factors using eigenvalues from correlation test and scree plot of eigenvalues
-```{r step-09, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 08. Determine number of factors using eigenvalues from correlation test and scree plot of eigenvalues
+```{r step-08, echo = TRUE, message = FALSE, warning = FALSE}
 dataset02_clean_ev <- eigen(cor(dataset02_clean))$values
 plot(dataset02_clean_ev, type = "b", main = "Eigenvalues (Scree Test)", xlab = "Factor Number", ylab = "Eigenvalue")
 ```
 
 
-# STEP 10. Run parallel analysis to determine number of factors from dataset directly
-```{r step-10, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 09. Run parallel analysis to determine number of factors from dataset directly
+```{r step-09, echo = TRUE, message = FALSE, warning = FALSE}
 fa.parallel(dataset02_clean, fa = "fa", n.iter = 100, show.legend = TRUE, main = "Scree Plot & Parallel Analysis")
 ```
 
-
-# STEP 11. EFA with no rotation and using 6 factors
-```{r step-11, echo = TRUE, message = FALSE, warning = FALSE}
-dataset02_clean_efa_no_rotation <- fa(dataset02_clean, nfactors = 6, rotate = "none", fm = "ml")
-print(dataset02_clean_efa_no_rotation$loadings, cutoff = 0.1)
-print(dataset02_clean_efa_no_rotation$loadings, cutoff = 0.4)
-```
-
-
-# STEP 12. EFA with no rotation and using 7 factors
-```{r step-12, echo = TRUE, message = FALSE, warning = FALSE}
-dataset02_clean_efa_no_rotation <- fa(dataset02_clean, nfactors = 7, rotate = "none", fm = "ml")
-print(dataset02_clean_efa_no_rotation$loadings, cutoff = 0.1)
-print(dataset02_clean_efa_no_rotation$loadings, cutoff = 0.4)
-```
-
-
-# STEP 13. EFA with oblimin rotation and using 6 factors
-```{r step-13, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 10. EFA with oblimin rotation and using 6 factors
+```{r step-10, echo = TRUE, message = FALSE, warning = FALSE}
 dataset02_clean_efa_oblimin_rotation <- fa(dataset02_clean, nfactors = 6, rotate = "oblimin", fm = "ml")
 print(dataset02_clean_efa_oblimin_rotation$loadings, cutoff = 0.1)
 print(dataset02_clean_efa_oblimin_rotation$loadings, cutoff = 0.4)
 ```
 
 
-# STEP 14. EFA with oblimin rotation and using 7 factors (nfactors)
-```{r step-14, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 11. EFA with oblimin rotation and using 7 factors
+```{r step-11, echo = TRUE, message = FALSE, warning = FALSE}
 dataset02_clean_efa_oblimin_rotation <- fa(dataset02_clean, nfactors = 7, rotate = "oblimin", fm = "ml")
 print(dataset02_clean_efa_oblimin_rotation$loadings, cutoff = 0.1)
 print(dataset02_clean_efa_oblimin_rotation$loadings, cutoff = 0.4)
 ```
 
 
-# STEP 15. EFA with varimax rotation and using 6 factors
-```{r step-15, echo = TRUE, message = FALSE, warning = FALSE}
-dataset02_clean_efa_varimax_rotation <- fa(dataset02_clean, nfactors = 6, rotate = "varimax", fm = "ml")
-print(dataset02_clean_efa_varimax_rotation$loadings, cutoff = 0.1)
-print(dataset02_clean_efa_varimax_rotation$loadings, cutoff = 0.4)
+# STEP 12. Confirm 7-factor structure, identify strong anchor indicators, spot problematic cross-loaders, weak items with low h^2 (communality) and high u^2 (uniqueness)
+```{r step-12, echo = TRUE, message = FALSE, warning = FALSE}
+efa7 <- fa(dataset02_clean, nfactors = 7, rotate = "oblimin", fm = "ml") 
+
+# diagnostic print 
+print(efa7, cut = 0.30, sort = TRUE) # shows which items are cross-loaders
+
+# keep these too 
+efa7$Phi # factor correlations - what factors are too strongly correlated with each other (>.8)
+efa7$communality # h2 values - how much an item’s variance is explained by the extracted factors (low h2 means noise, e.g. <.2)
 ```
 
 
-# STEP 16. EFA with varimax rotation and using 7 factors
-```{r step-16, echo = TRUE, message = FALSE, warning = FALSE}
-dataset02_clean_efa_varimax_rotation <- fa(dataset02_clean, nfactors = 7, rotate = "varimax", fm = "ml")
-print(dataset02_clean_efa_varimax_rotation$loadings, cutoff = 0.1)
-print(dataset02_clean_efa_varimax_rotation$loadings, cutoff = 0.4)
-```
-
-
-# STEP 17. Visualise factor loadings using pre-determined EFA model (unrotated/oblique/varimax)
-```{r step-17, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 13. Visualise factor loadings using pre-determined EFA model
+```{r step-13, echo = TRUE, message = FALSE, warning = FALSE}
 fa.diagram(dataset02_clean_efa_oblimin_rotation, cut=0.2, digits = 3, main = "Factor Loadings Diagram")
-#modify above by using the clearest solution, which could be no rotation, oblimin, or varimax
 ```
 
 
-# STEP 18. BONUS - use lavaan to do EFA
-```{r step-18, echo = TRUE, message = FALSE, warning = FALSE}
+# STEP 14. BONUS - confirm findings above using lavaaan
+```{r step-14, echo = TRUE, message = FALSE, warning = FALSE}
 dataset02_clean_efa_lavaan <- efa(data = dataset02_clean [,1:87], nfactors = 1:7)
 summary(dataset02_clean_efa_lavaan)
 ```
