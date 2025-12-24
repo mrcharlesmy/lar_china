@@ -2854,7 +2854,7 @@ font-size: 0.95em;
 <div id="notes" class="section level1">
 <h1>NOTES</h1>
 <pre><code>## 
-## - Purpose: to rerun EFA (round 1) using lavaan, and compare parsimony (CFI &amp; RMSEA) plus factor-dominance for different nfactor solutions.
+## - Purpose: to rerun EFA (round 1) using lavaan, and compare fitness (CFI &amp; RMSEA) plus factor-dominance for different nfactor solutions.
 ## - Dataset used: lar-china_test02_group_A_622_v0.csv
 ## - Note: this test does not result in removal of any item yet; it simply helps to decide which factor and what item loading cutoff value to consider.
 ## </code></pre>
@@ -3275,7 +3275,7 @@ recommendation by earlier parallel analysis</h1>
 ## item_87      .*      .*      .*           0.670           0.330
 ## 
 ##                                f2     f1    f3  total
-## Sum of sq (obliq) loadings 17.258 11.925 5.794 34.977
+## Sum of sq (obliq) loadings 17.258 11.926 5.794 34.977
 ## Proportion of total         0.493  0.341 0.166  1.000
 ## Proportion var              0.198  0.137 0.067  0.402
 ## Cumulative var              0.198  0.335 0.402  0.402
@@ -3381,7 +3381,7 @@ recommendation by earlier parallel analysis</h1>
 ## item_87      .*      .       .*      .*           0.658           0.342
 ## 
 ##                                f1     f2    f3    f4  total
-## Sum of sq (obliq) loadings 13.381 13.192 5.888 4.036 36.497
+## Sum of sq (obliq) loadings 13.381 13.193 5.888 4.036 36.497
 ## Proportion of total         0.367  0.361 0.161 0.111  1.000
 ## Proportion var              0.154  0.152 0.068 0.046  0.420
 ## Cumulative var              0.154  0.305 0.373 0.420  0.420
@@ -3488,7 +3488,7 @@ recommendation by earlier parallel analysis</h1>
 ## item_87              .*      .*      .*      .*           0.655           0.345
 ## 
 ##                                f5     f2    f3    f4    f1  total
-## Sum of sq (obliq) loadings 12.684 12.112 6.035 4.334 2.802 37.966
+## Sum of sq (obliq) loadings 12.685 12.112 6.035 4.334 2.800 37.966
 ## Proportion of total         0.334  0.319 0.159 0.114 0.074  1.000
 ## Proportion var              0.146  0.139 0.069 0.050 0.032  0.436
 ## Cumulative var              0.146  0.285 0.354 0.404 0.436  0.436
@@ -3516,7 +3516,7 @@ recommendation by earlier parallel analysis</h1>
 ## item_07      .*      .       .*      .*              .*           0.773
 ## item_08      .*      .*      .               .*      .            0.550
 ## item_09  0.674*              .               .                    0.458
-## item_10  0.585*              .               .*                   0.431
+## item_10  0.586*              .               .*                   0.431
 ## item_11              .*          0.603*      .*      .            0.584
 ## item_12      .       .*          0.541*      .       .            0.700
 ## item_13      .*      .       .*              .*      .            0.530
@@ -3684,7 +3684,7 @@ recommendation by earlier parallel analysis</h1>
 ## item_87           0.346
 ## 
 ##                                f5    f1    f4    f6    f3    f2  total
-## Sum of sq (obliq) loadings 10.847 7.670 6.043 5.717 4.511 4.347 39.134
+## Sum of sq (obliq) loadings 10.847 7.671 6.044 5.717 4.510 4.347 39.134
 ## Proportion of total         0.277 0.196 0.154 0.146 0.115 0.111  1.000
 ## Proportion var              0.125 0.088 0.069 0.066 0.052 0.050  0.450
 ## Cumulative var              0.125 0.213 0.282 0.348 0.400 0.450  0.450
@@ -3881,7 +3881,7 @@ recommendation by earlier parallel analysis</h1>
 ## item_87           0.345
 ## 
 ##                               f6    f1    f3    f5    f7    f2    f4  total
-## Sum of sq (obliq) loadings 8.790 7.131 6.465 5.721 5.335 3.532 3.202 40.174
+## Sum of sq (obliq) loadings 8.789 7.131 6.465 5.721 5.335 3.532 3.202 40.174
 ## Proportion of total        0.219 0.177 0.161 0.142 0.133 0.088 0.080  1.000
 ## Proportion var             0.101 0.082 0.074 0.066 0.061 0.041 0.037  0.462
 ## Cumulative var             0.101 0.183 0.257 0.323 0.384 0.425 0.462  0.462
@@ -3897,8 +3897,8 @@ recommendation by earlier parallel analysis</h1>
 ## f6  0.477*  0.403*  0.447*  0.274*  0.169*  1.000         
 ## f7  0.432*  0.244*  0.401*  0.160*  0.140*  0.509*  1.000</code></pre>
 </div>
-<div id="step-05.-comparing-parsimony-for-solutions-with-4-5-6-and-7-factors." class="section level1">
-<h1>STEP 05. Comparing parsimony for solutions with 4, 5, 6, and 7
+<div id="step-05.-comparing-fitness-for-solutions-with-4-5-6-and-7-factors." class="section level1">
+<h1>STEP 05. Comparing fitness for solutions with 4, 5, 6, and 7
 factors.</h1>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># outputting the CFI and RMSEA values first for quick and easy comparison</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>cfi_rmsea <span class="ot">&lt;-</span> dataset03_lavaan</span>
