@@ -14,14 +14,14 @@
     * { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      padding: 24px;
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
-      font-family: "Open Sans", sans-serif;
-      line-height: 1.6;
-    }
+    margin: 0;
+    width: min(90vw, 1800px);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;              /* slightly smaller padding */
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.6;
+  }
 
     h1 {
       font-family: "Playfair Display", serif;
@@ -35,14 +35,16 @@
     }
 
     table {
-      border-collapse: collapse;
-      width: 100%;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
     }
 
-    td, th {
-      padding: 8px 10px;
-      vertical-align: top;
-    }
+	td, th {
+    padding: 8px 10px;
+    vertical-align: top;
+    word-break: break-word;
+	}
   </style>
 	
 </head>
